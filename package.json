@@ -1,0 +1,16 @@
+{
+  "scripts": {
+    "clean": "rimraf spec/**/*.{js,map} && rimraf src/**/*.{js,map} && rimraf bin/**/*.{js,map}",
+    "compile": "npm run clean && tsc --out bin/don.js src/don.ts && tsc --out spec/allTest.js spec/**/*.ts",
+    "test": "npm run compile && jasmine"
+  },
+  "devDependencies": {
+    "sinon": "^1.17.1",
+    "tsd": "^0.6.3"
+  },
+  "repository": {
+    "type": "git",
+    "url": "________"
+  },
+  "license" : "(C) Veritrans 2015"
+}
