@@ -1,5 +1,5 @@
 module template {
-	
+
 	export function simple(url : String, clientKey : String, host : String, amount : number) {
 		let html = `<!DOCTYPE html>
 <html lang="en">
@@ -49,7 +49,7 @@ module template {
 		var card = function(){
 			return {
 			'card_number'     	: document.getElementById("ccnum").value.replace(/\s+/, "").trim(),
-			'card_exp_month'  	: payform.parseCardExpiry(document.getElementById("expiry").value).month < 10 ? "0" + payform.parseCardExpiry(document.getElementById("expiry").value).month : 
+			'card_exp_month'  	: payform.parseCardExpiry(document.getElementById("expiry").value).month < 10 ? "0" + payform.parseCardExpiry(document.getElementById("expiry").value).month :
 			payform.parseCardExpiry(document.getElementById("expiry").value).month,
 			'card_exp_year'   	: payform.parseCardExpiry(document.getElementById("expiry").value).year,
 			'card_cvv'        	: document.getElementById("cvc").value.replace(/\s+/, "").trim(),
@@ -57,24 +57,23 @@ module template {
 			'gross_amount'   	: ${amount}
 			}
 		};
-		
+
 		document.getElementById("submit").addEventListener("click", function() {
-			console.log(card());
 			if (document.getElementById("result").classList.contains("valid")) {
-				
+
 				Veritrans.token(card, function(event){
 					window.parent.postMessage(event.token_id, "http://${host}");
-				});	
+				});
 			}
 		});
 	</script>
 </body>
 
 </html>`;
-		
+
 		return html;
 	}
-	
+
 	export function semantic(url : String, clientKey : String, host : String, amount : number) {
 		let html = `
 		<!DOCTYPE html>
@@ -127,6 +126,9 @@ module template {
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
 <script src="http://127.0.0.1:8080/lib/js/jquery.formatter.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.1.4/semantic.min.js"></script>
+
+<script src="http://127.0.0.1:8080/Veritrans.js"></script>
+
 
 <script type="text/javascript">
     $(document).ready(function() {
@@ -198,10 +200,9 @@ module template {
 
         $('#credit-card-form').submit(function(event){
             event.preventDefault();
-            var card_number = document.getElementById('card-number').value.replace(/\s+/, "");
-            console.log(card_number);
+            var card_number = document.getElementById('card-number').value.replace(/\\s/g, "");
             var card_exp_date = document.getElementById('exp-date').value.replace(/[/]/g, '');
-            var card_exp_month = document.getElementById('exp-date').value.substr(0,2);
+						var card_exp_month = document.getElementById('exp-date').value.substr(0,2);
             var card_exp_year = document.getElementById('exp-date').value.substr(5,2);
             var card_cvv = document.getElementById('cvv').value;
             var error_messages = "";
@@ -230,16 +231,16 @@ module template {
                         'card_exp_year' : card_exp_year,
                         'card_cvv' : card_cvv,
                         'gross_amount' : ${amount}
-                    }    
+                    }
                 }
-                
+
                 Veritrans.url = "${url}";
 		        Veritrans.client_key = "${clientKey}";
-                
+
                 Veritrans.token(card, function(event){
 					window.parent.postMessage(event.token_id, "http://${host}");
 				});
-                
+
                 return true;
             }
         });
@@ -248,7 +249,7 @@ module template {
 </script>
 </body>
 </html>`;
-		
+
 		return html;
 	}
 
@@ -1086,7 +1087,6 @@ module template {
 		};
 
 		document.getElementById("submit").addEventListener("click", function() {
-			console.log(card());
 			Veritrans.token(card, function(event){
 				window.parent.postMessage(event.token_id, "http://${host}");
 			});
