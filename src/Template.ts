@@ -1,11 +1,12 @@
 module template {
 	
-	function boilerPlate (css : string[], body : string, script : string[]) {
+	function boilerPlate (css : string[], body : string, script : string[], url : String, clientKey : String, host : String) {
 		let styles = css.map((value) => `<link rel="stylesheet" href="${value}">`).join("");
 		let scripts = script.map((value) => `<script src="${value}"></script>`).join("");
 		
 		console.log(styles); // kepanggil correctly
 		console.log(scripts); // kepanggil correctly
+		console.log(host); // kepanggil correctly
 		let html = `<!DOCTYPE html>
 		<html lang="en">
 		<head>
@@ -16,21 +17,31 @@ module template {
 		<body>
 			${body}
 			${scripts}
-			<script src="bin/Veritrans.js"></script>
+			<script src="http://127.0.0.1:8080/Veritrans.js"></script>
 			<script>
-				Veritrans.c = "";
-				Veritrans.client_key = "" 
+				Veritrans.url = "${url}";
+				Veritrans.client_key = "${clientKey}";
+				window.parent.postMessage("someKindOfTokenId", "http://${host}");
 			</script>
 		</body>
 		</html>`;
 		return html;
 	}
 	
-	export let bootStrap = `${
+	// kurang Veritrans.token(tokenForm, callBackEvent);
+	// itu keduanya kita yg generate
+	// kemudian disambungin dengan postMessage
+	
+	// is a function
+	export function bootStrap(url : String, clientKey : String, host : String) {
+		return  `${
 		boilerPlate(
 			["https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css", "https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap-theme.min.css"], 
 			"formBody", 
-			["https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"]
+			["https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"],
+			url, 
+			clientKey,
+			host
 			)
-		}`;
+		}`};
 }
