@@ -72,8 +72,9 @@ class ProjectDon implements Client {
 	generateForm(id: string, templateName: string): void {
 		let document = window.document;
 		let iframe = document.createElement('iframe');
-		let templateObj : any = template;
+		let templateObj : any = template; // set client key first. pake class aja
 		let html = templateObj[templateName];
+		console.log(html); // ini aja udah undefined
 		iframe.src = 'data:text/html;charset=utf-8,' + encodeURI(html);
 		window.document.getElementById(id).appendChild(iframe);
 		// console.log('iframe.contentWindow =', iframe.contentWindow);
