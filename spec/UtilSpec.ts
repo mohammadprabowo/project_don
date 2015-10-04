@@ -19,7 +19,7 @@ describe("Util helper function", () => {
 			card_exp_year: "2017",
 			client_key: "e668b029-db9d-46fd-b863-e9056f404204",
 			secure_callback: "Veritrans.c",
-			gross_amount: 10000,
+			gross_amount: 10000,			
 			callback: "Veritrans.c",
 		};
 
