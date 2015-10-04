@@ -11,6 +11,9 @@
 class ProjectDon implements Client {
 	url = "https://api.veritrans.co.id/v2/token";
 	client_key = "";
+	
+	// nyambung, get, set sampai ke templatenya
+	// refference ke this aja?
 
 	private util: Util;
 	private window: Window
@@ -18,8 +21,6 @@ class ProjectDon implements Client {
 	constructor(util: Util, window: Window) {
 		this.util = util;
 		this.window = window;
-		
-		// ugh, add event listenernya ugly
 	}
 
 	token(token: () => Token, callbackEvent: any): void {
@@ -69,17 +70,27 @@ class ProjectDon implements Client {
 		this.util.processJsonP(request);
 	};
 
-	generateForm(id: string, templateName: string): void {
+	// callbackMerchant diatas
+	generateForm(id: string, templateName: string, callback: (tokenId: String) => void): void {
 		let document = window.document;
-		let iframe = document.createElement('iframe');
-		let templateObj : any = template;
-		let html = templateObj[templateName];
-		iframe.src = 'data:text/html;charset=utf-8,' + encodeURI(html);
+		let iframe : HTMLIFrameElement = document.createElement('iframe');
+		let templateObj: any = template;
+		let host = window.location.host;
+		let html = templateObj[templateName](this.url, this.client_key, host);
 		window.document.getElementById(id).appendChild(iframe);
-		// console.log('iframe.contentWindow =', iframe.contentWindow);
+		
+		iframe.contentWindow.document.open();
+		iframe.contentWindow.document.write(html);
+		iframe.contentWindow.document.close();
+		
+		window.addEventListener("message", (event : MessageEvent) => {
+			console.log(event);
+			if (event.data) {
+				let tokenId = new String(event.data);
+				callback(tokenId.length !== 0 ? tokenId : "");
+			}
+		});
 	}
 }
 
-// add event listener
-// receive message
 // appendRedirectUrl (migs)

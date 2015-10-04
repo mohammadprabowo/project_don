@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>BootStrap Embedded Exmaple</title>
+</head>
+<body>
+	<div id="hello"></div>
+	<script src="http://127.0.0.1:8080/Veritrans.js"></script>
+	<script>
+		// set client_key and demo_key
+		function merchantCallback (tokenId) {
+			console.log(tokenId + "from parrent");
+		}
+		Veritrans.generateForm("hello", "simple", merchantCallback);
+	</script>
+</body>
+</html>
