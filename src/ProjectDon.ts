@@ -21,9 +21,6 @@ class ProjectDon implements Client {
 	constructor(util: Util, window: Window) {
 		this.util = util;
 		this.window = window;
-		
-		// UUID set disini;
-		
 	}
 
 	token(token: () => Token, callbackEvent: any): void {
@@ -80,7 +77,6 @@ class ProjectDon implements Client {
 		let templateObj: any = template;
 		let host = window.location.host;
 		let html = templateObj[templateName](this.url, this.client_key, host);
-		// iframe.src = 'data:text/html;charset=utf-8,' + encodeURI(html);
 		window.document.getElementById(id).appendChild(iframe);
 		
 		iframe.contentWindow.document.open();
@@ -97,5 +93,4 @@ class ProjectDon implements Client {
 	}
 }
 
-// receive message parrent
 // appendRedirectUrl (migs)

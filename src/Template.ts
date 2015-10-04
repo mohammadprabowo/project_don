@@ -38,7 +38,7 @@ module template {
 		boilerPlate(
 			["https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css", "https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap-theme.min.css"], 
 			"formBody", 
-			["https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"],
+			["http://code.jquery.com/jquery-2.1.4.min.js", "https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"],
 			url, 
 			clientKey,
 			host
