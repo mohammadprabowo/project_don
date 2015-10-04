@@ -4,9 +4,6 @@ module template {
 		let styles = css.map((value) => `<link rel="stylesheet" href="${value}">`).join("");
 		let scripts = script.map((value) => `<script src="${value}"></script>`).join("");
 		
-		console.log(styles); // kepanggil correctly
-		console.log(scripts); // kepanggil correctly
-		console.log(host); // kepanggil correctly
 		let html = `<!DOCTYPE html>
 		<html lang="en">
 		<head>
@@ -32,7 +29,64 @@ module template {
 	// itu keduanya kita yg generate
 	// kemudian disambungin dengan postMessage
 	
-	// is a function
+	export function simple(url : String, clientKey : String, host : String) {
+			let html = `<!DOCTYPE html>
+		<html lang="en">
+		<head>
+			<meta charset="UTF-8">
+			<title>Veritrans Embedded Form</title>
+			<link rel="stylesheet" href="http://jondavidjohn.github.io/payform/stylesheets/styles.css">
+			<link rel="stylesheet" href="http://jondavidjohn.github.io/payform/stylesheets/pygment_trac.css">
+		</head>
+		<body>
+			        <section>
+
+        <h2><a id="example" class="anchor" href="#example" aria-hidden="true"><span class="octicon octicon-link"></span></a>Example <small><a href="https://github.com/jondavidjohn/payform/blob/gh-pages/javascripts/form.js">(view source)</a></small></h2>
+
+        <small><em><a href="http://www.paypalobjects.com/en_US/vhelp/paypalmanager_help/credit_card_numbers.htm" target="_blank">You probably want to use a test card.</a></em></small>
+
+        <div>
+          <span class="field">
+            <label for="ccnum">Card Number</label>
+            <input placeholder="---- ---- ---- ----" type="tel" size="19" name="ccnum" value="" id="ccnum">
+          </span>
+          <div><small>type: <strong id="ccnum-type">visa</strong></small></div>
+        </div>
+
+        <div>
+          <span class="field">
+            <label for="expiry">Expiration</label>
+            <input placeholder="-- / --" size="7" type="tel" name="expiry" value="" id="expiry">
+          </span>
+
+          <span class="cvc field">
+            <label for="cvc">CVC</label>
+            <input placeholder="---" size="4" type="tel" name="cvc" value="" id="cvc">
+          </span>
+        </div>
+
+        <div>
+          <button id="submit">Validate</button>
+          <div id="result" class="emoji valid"></div>
+        </div>
+      </section>
+	  		<script src="http://jondavidjohn.github.io/payform/javascripts/scale.fix.js"></script>
+			<script src="http://jondavidjohn.github.io/payform/javascripts/payform.min.js"></script>
+			<script src="http://jondavidjohn.github.io/payform/javascripts/form.js"></script>
+			
+			<script src="http://127.0.0.1:8080/Veritrans.js"></script>
+			<script>
+				Veritrans.url = "${url}";
+				Veritrans.client_key = "${clientKey}";
+				// Veritrans.token(token(), callback)
+				window.parent.postMessage("someKindOfTokenId", "http://${host}");
+			</script>
+		</body>
+		</html>`;
+		
+		return html;
+	}
+	
 	export function bootStrap(url : String, clientKey : String, host : String) {
 		return  `${
 		boilerPlate(
