@@ -31,8 +31,8 @@ class Util {
 		let keys = Object.keys(token);
 
 		let queryString = '?' + keys.filter((value) => tokenObject.hasOwnProperty(value))
-			.map(value => encode(value) + '=' + encode(tokenObject[value]) + '&')
-			.reduce((prev, curr) => prev.concat(curr), "");
+			.map(value => encode(value) + '=' + encode(tokenObject[value]))
+			.join('&');
 
         return queryString;
     }
