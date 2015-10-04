@@ -1,33 +1,5 @@
 module template {
 	
-	function boilerPlate (css : string[], body : string, script : string[], url : String, clientKey : String, host : String) {
-		let styles = css.map((value) => `<link rel="stylesheet" href="${value}">`).join("");
-		let scripts = script.map((value) => `<script src="${value}"></script>`).join("");
-		
-		let html = `<!DOCTYPE html>
-		<html lang="en">
-		<head>
-			<meta charset="UTF-8">
-			<title>Veritrans Embedded Form</title>
-			${styles}
-		</head>
-		<body>
-			${body}
-			${scripts}
-			<script src="http://127.0.0.1:8080/Veritrans.js"></script>
-			<script>
-				Veritrans.url = "${url}";
-				Veritrans.client_key = "${clientKey}";
-				window.parent.postMessage("someKindOfTokenId", "http://${host}");
-			</script>
-		</body>
-		</html>`;
-		return html;
-	}
-	
-	// kurang Veritrans.token(tokenForm, callBackEvent); // biar simple
-	// simplify template generation
-	
 	export function simple(url : String, clientKey : String, host : String, amount : number) {
 		let html = `<!DOCTYPE html>
 <html lang="en">
@@ -103,15 +75,180 @@ module template {
 		return html;
 	}
 	
-	export function bootStrap(url : String, clientKey : String, host : String) {
-		return  `${
-		boilerPlate(
-			["https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css", "https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap-theme.min.css"], 
-			"formBody", 
-			["http://code.jquery.com/jquery-2.1.4.min.js", "https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"],
-			url, 
-			clientKey,
-			host
-			)
-		}`};
+	export function semantic(url : String, clientKey : String, host : String, amount : number) {
+		let html = `
+		<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.1.4/semantic.min.css">
+    <title>New Document</title>
+</head>
+
+<body>
+
+    <div class="container">
+
+
+            <form id="credit-card-form" name="creditcardform" class="ui form">
+                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                    <div id="error-message" class="ui error message"></div>
+                    <div class="form-group">
+                        <label>Credit Card Number</label>
+                        <div class="ui fluid icon input">
+                            <input id="card-number" name="cardnumber" class="form-control" type="text" placeholder="XXXX XXXX XXXX XXXX" />
+                            <i id="credit-card-logo" class="payment icon"></i>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xs-7 col-sm-7 col-md-7 col-lg-7">
+                    <div class="form-group">
+                        <label>Exp. Date</label>
+                        <input id="exp-date" name="expdate" class="form-control" type="text" placeholder="MM / YY" />
+                    </div>
+                </div>
+                <div class="col-xs-5 col-sm-5 col-md-5 col-lg-5">
+                    <div class="form-group">
+                        <label>CVV</label>
+                        <input id="cvv" name="cvv" class="form-control" type="text" placeholder="***" />
+                    </div>
+                </div>
+                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                    <div class="form-group">
+                        <input type="submit" class="ui primary button fluid" value="Confirm Payment ${amount}" />
+                    </div>
+                </div>
+            </form>
+
+    </div>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+<script src="http://127.0.0.1:8080/lib/js/jquery.formatter.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.1.4/semantic.min.js"></script>
+
+<script type="text/javascript">
+    $(document).ready(function() {
+
+        function isCardNumberValid (cardnumber) {
+            var len = cardnumber.length;
+            var mul = 0;
+            var prodArr = [[0, 1, 2, 3, 4, 5, 6, 7, 8, 9], [0, 2, 4, 6, 8, 1, 3, 5, 7, 9]];
+            var sum = 0;
+
+            while (len--) {
+                sum += prodArr[mul][parseInt(cardnumber.charAt(len), 10)];
+                mul ^= 1;
+            }
+
+            if (sum % 10 === 0 && sum > 0) {
+                return true;
+            } else {
+                return false;
+            }
+        }
+
+        function isExpDateValid (expdate) {
+            var date = expdate.split(" ");
+            date[1] = date[2];
+            var currentDate = new Date();
+            if (expdate.length == 6) {
+              //Format date mm/yy
+              var str = '20';
+              date[1] = parseInt(str + date[1]);
+            }
+
+            if (currentDate.getFullYear() == date[1]){
+              if (date[0] >= currentDate.getMonth() && date[0] <= 12){
+                return true;
+              }
+              else {
+                return false;
+              }
+            }
+            else if (date[1] > currentDate.getFullYear()){
+              if (date[0] >= 1 && date[0] <= 12){
+                return true;
+              }
+              else{
+                return false;
+              }
+            }
+            else{
+              return false;
+            }
+        }
+
+        function isCvvValid (cvv) {
+            if (isNaN(parseInt(cvv))){
+                return false;
+            } else {
+                return true;
+            }
+        }
+
+        $('#card-number').formatter({
+            'pattern': '{{9999}} {{9999}} {{9999}} {{9999}}'
+        });
+
+        $('#exp-date').formatter({
+            'pattern': '{{99}} / {{99}}'
+        });
+
+        $('#credit-card-form').submit(function(event){
+            event.preventDefault();
+            var card_number = document.getElementById('card-number').value.replace(/\s+/, "");
+            console.log(card_number);
+            var card_exp_date = document.getElementById('exp-date').value.replace(/[/]/g, '');
+            var card_exp_month = document.getElementById('exp-date').value.substr(0,2);
+            var card_exp_year = document.getElementById('exp-date').value.substr(5,2);
+            var card_cvv = document.getElementById('cvv').value;
+            var error_messages = "";
+            if (!isCardNumberValid(card_number)){
+                error_messages += "<li>Card Number is Invalid</li>";
+            }
+            if (!isCvvValid(card_cvv)){
+                error_messages += "<li>CVV is Invalid</li>";
+            }
+            if (!isExpDateValid(card_exp_date)){
+                error_messages += "<li>Exp Date is Invalid</li>";
+            }
+            $('#error-message').empty().append(error_messages);
+            if (error_messages != ""){
+                event.preventDefault();
+                $('#error-message').show();
+
+                return false;
+            } else {
+                event.preventDefault();
+                var card = function() {
+                    return {
+                        'card_number' : card_number,
+                        'card_exp_date' : card_exp_date,
+                        'card_exp_month' : card_exp_month,
+                        'card_exp_year' : card_exp_year,
+                        'card_cvv' : card_cvv,
+                        'gross_amount' : ${amount}
+                    }    
+                }
+                
+                Veritrans.url = "${url}";
+		        Veritrans.client_key = "${clientKey}";
+                
+                Veritrans.token(card, function(event){
+					window.parent.postMessage(event.token_id, "http://${host}");
+				});
+                
+                return true;
+            }
+        });
+    });
+
+</script>
+</body>
+</html>`;
+		
+		return html;
+	}
 }

@@ -38,7 +38,7 @@
                 </div>
                 <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
                     <div class="form-group">
-                        <input type="submit" class="ui primary button fluid" value="Confirm Payment" />
+                        <input type="submit" class="ui primary button fluid" value="Confirm Payment ${amount}" />
                     </div>
                 </div>
             </form>
@@ -46,7 +46,7 @@
     </div>
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
-<script src="lib/js/jquery.formatter.min.js"></script>
+<script src="http://127.0.0.1:8080/lib/js/jquery.formatter.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.1.4/semantic.min.js"></script>
 
 <script type="text/javascript">
@@ -109,32 +109,6 @@
             }
         }
 
-        function cardType (cardnumber) {
-            if(/^5[1-5]/.test(cardnumber)) {
-                return "MasterCard";
-            }
-            else if (/^4/.test(cardnumber)) {
-                return "Visa";
-            } else {
-                return "None";
-            }
-        }
-
-        function reformatCardNumber (card) {
-            if (card.length > 16) {
-                card = card.substr(0,16);
-            }
-            var rev     = card.split('');
-            var rev2    = '';
-            for(var i = 0; i < rev.length; i++){
-                rev2  += rev[i];
-                if((i + 1) % 4 === 0 && ((i + 1) / 4) !== 4){
-                    rev2 += ' ';
-                }
-            }
-            return rev2;
-        }
-
         $('#card-number').formatter({
             'pattern': '{{9999}} {{9999}} {{9999}} {{9999}}'
         });
@@ -168,31 +142,28 @@
                 return false;
             } else {
                 event.preventDefault();
+                var card = function() {
+                    return {
+                        'card_number' : card_number,
+                        'card_exp_date' : card_exp_date,
+                        'card_exp_month' : card_exp_month,
+                        'card_exp_year' : card_exp_year,
+                        'card_cvv' : card_cvv,
+                        'gross_amount' : ${amount}
+                    }    
+                }
+                
+                Veritrans.url = "${url}";
+		        Veritrans.client_key = "${clientKey}";
+                
+                Veritrans.token(card, function(event){
+					window.parent.postMessage(event.token_id, "http://${host}");
+				});
+                
                 return true;
             }
-
-        })
-
-        $('#card-number').on('input',function(){
-            var cardnumber = $(this).val().replace(/\s/g, '');
-
-            console.log(cardnumber);
-            if (!isCardNumberValid(cardnumber) && cardnumber.length == 16){
-                console.log('not valid');
-            }
-            else {
-                if (cardType(cardnumber) == "MasterCard"){
-                    $('#credit-card-logo').removeClass('visa').removeClass('payment').addClass('mastercard');
-                }
-                else if (cardType(cardnumber) == "Visa"){
-                    $('#credit-card-logo').removeClass('mastercard').removeClass('payment').addClass('visa');
-                } else {
-                    $('#credit-card-logo').removeClass('mastercard').removeClass('visa').addClass('payment');
-                }
-            }
-           $(this).val(reformatCardNumber(cardnumber));
         });
-    })
+    });
 
 </script>
 </body>
