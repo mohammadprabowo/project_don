@@ -1,6 +1,6 @@
 /// <reference path="Client.ts" />
 
-module Don {
+module ProjectDon {
 	export let url = "https://api.veritrans.co.id/v2/token";
 	export let client_key = "";
 
@@ -56,7 +56,7 @@ module Don {
 	export function generateForm(): void { }
 }
 
-let Veritrans: Client = Don;
+let Veritrans: Client = ProjectDon;
 
 // add event listener
 // receive message

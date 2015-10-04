@@ -1,1 +1,1 @@
-enum Bank {BNI, MANDIRI, CIMB, BCA}
+enum Bank {bni, mandiri, cimb, bca}
