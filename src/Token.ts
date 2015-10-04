@@ -1,6 +1,6 @@
 /// <reference path="Bank.ts" />
 
-class Token {
+interface Token {
       card_number : String;
       card_exp_month : String;
       card_exp_year : String;
@@ -8,7 +8,7 @@ class Token {
       secure : boolean;
       bank : Bank;
       gross_amount : number;  
-      two_click : String;
+      two_click? : String;
       callback : String;
       secure_callback : String;
       client_key : String;

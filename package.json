@@ -1,8 +1,9 @@
 {
   "scripts": {
     "clean": "rimraf spec/**/*.{js,map} && rimraf src/**/*.{js,map} && rimraf bin/**/*.{js,map}",
-    "compile": "npm run clean && tsc --out bin/ProjectDon.js src/ProjectDon.ts && tsc --out spec/ProjectDonSpec.js spec/ProjectDonSpec.ts",
-    "test": "npm run compile && jasmine"
+    "compile": "npm run clean && tsc --out bin/ProjectDon.js src/ProjectDon.ts",
+    "compileTest" : "npm run clean && tsc --out spec/*.ts",
+    "test": "npm run compileTest && jasmine"
   },
   "devDependencies": {
     "sinon": "^1.17.1",
