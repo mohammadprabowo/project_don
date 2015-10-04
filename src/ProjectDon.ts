@@ -1,27 +1,35 @@
 /// <reference path="Client.ts" />
 /// <reference path="Util.ts" />
 
-module ProjectDon {
-	export let url = "https://api.veritrans.co.id/v2/token";
-	export let client_key = "";
+class ProjectDon {
+	url = "https://api.veritrans.co.id/v2/token";
+	client_key = "";
 	
-	export function token(token: () => Token, callbackEvent: any): void {
-		let cleanToken = Util.validateToken(token, client_key, false);
-		let request = url + Util.toQueryParam(cleanToken);
-		Util.processJsonP(request);
+	private util : Util;
+	
+	constructor(util : Util) {
+		this.util = util;
+	}
+	
+	token(token: () => Token, callbackEvent: any): void {
+		let cleanToken = this.util.validateToken(token, this.client_key, false);
+		let request = this.url + this.util.toQueryParam(cleanToken);
+		this.util.processJsonP(request);
 	};
 
-	export function tokenCvv(token: () => Token, callbackEvent: any): void {
-		let cleanToken = Util.validateToken(token, client_key, true);
-		let request = url + Util.toQueryParam(cleanToken);
-		Util.processJsonP(request);
+	tokenCvv(token: () => Token, callbackEvent: any): void {
+		let cleanToken = this.util.validateToken(token, this.client_key, true);
+		let request = this.url + this.util.toQueryParam(cleanToken);
+		this.util.processJsonP(request);
 	};
 
-	export function generateForm(): void { }
+	generateForm(): void { }
 }
-
-let Veritrans: Client = ProjectDon;
 
 // add event listener
 // receive message
 // appendRedirectUrl (migs)
+
+
+// error in jasmine....
+// let Veritrans: Client = new ProjectDon(new Util(document));

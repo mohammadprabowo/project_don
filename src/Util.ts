@@ -1,7 +1,13 @@
 /// <reference path="Token.ts" />
 
 class Util {
-	static validateToken(token: () => Token, clientKey: String, isTwoClick: boolean) {
+	private document : Document;
+	
+	constructor(document : Document){
+		this.document = document;
+	}
+	
+	validateToken(token: () => Token, clientKey: String, isTwoClick: boolean) {
 		// add validation here if needed, before send to url endpoint
 		let vtRequest = token();
 
@@ -17,13 +23,13 @@ class Util {
 		return vtRequest;
 	};
 
-	static processJsonP(url: String) {
-		let s = document.createElement('script');
+	processJsonP(url: String) {
+		let s = this.document.createElement('script');
         s.src = String(url);
-        document.getElementsByTagName('head')[0].appendChild(s);
+        this.document.getElementsByTagName('head')[0].appendChild(s);
 	};
 
-	static toQueryParam(token: Token) {
+	toQueryParam(token: Token) {
 		let tokenObject: any;
 		tokenObject = token;
 
