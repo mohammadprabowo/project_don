@@ -46,8 +46,6 @@
     </div>
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/mustache.js/2.1.3/mustache.js"></script>
-<script src="lib/js/jquery.maskedinput.js"></script>
 <script src="lib/js/jquery.formatter.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.1.4/semantic.min.js"></script>
 
@@ -175,8 +173,6 @@
 
         })
 
-
-
         $('#card-number').on('input',function(){
             var cardnumber = $(this).val().replace(/\s/g, '');
 
@@ -196,11 +192,6 @@
             }
            $(this).val(reformatCardNumber(cardnumber));
         });
-
-
-
-
-
     })
 
 </script>

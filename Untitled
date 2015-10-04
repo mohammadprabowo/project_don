@@ -1,0 +1,109 @@
+<html>
+  <head>
+    <title>VT-Direct Form Example</title>
+  </head>
+  <body>
+    <h1>Checkout</h1>
+    <form action="checkout.php" method="POST" id="payment-form">
+      <label>Card Number</label>
+      <input id="card-number" size="20" type="text" value="4811111111111114"/>
+      <br />
+
+      <label>Expiration (MM/YYYY)</label>
+      <input id="card-expiry-month" size="2" type="text" value="01"/>
+      <span> / </span>
+      <input id="card-expiry-year" size="4" type="text" value="2020"/>
+      <br />
+
+      <label>CVV</label>
+      <input id="card-cvv" size="3" type="password" value="123"/>
+      <br />
+
+      <!-- Additional Field -->
+      <label>Harga</label>
+      <input id="price" name="price" type="text" value="200500"/>
+
+      <input id="token-id" name="token-id" type="hidden" />
+      <button id="submit-button" type="submit">Pay</button>
+    </form>
+  </body>
+</html>
+
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+<script type="text/javascript" src="fancybox/jquery.fancybox.pack.js"></script>
+<link rel="stylesheet" href="fancybox/jquery.fancybox.css" type="text/css" media="screen" />
+
+<!-- Javascript to generate token and show 3DSecure Dialog -->
+<script type="text/javascript">
+$(function(){
+  // Sandbox API URL. TODO: Change with Production API URL when you're ready to go live.
+  Veritrans.url = "https://api.sandbox.veritrans.co.id/v2/token";
+
+  // TODO: Change with your actual client key that can be found at Merchant Administration Portal >> Settings >> Access Key
+  Veritrans.client_key = "< Your Client Key>";
+  var card = function(){
+    return {
+      'card_number'     : $("#card-number").val(),
+      'card_exp_month'  : $("#card-expiry-month").val(),
+      'card_exp_year'   : $("#card-expiry-year").val(),
+      'card_cvv'        : $("#card-cvv").val(),
+
+      // Set 'secure', 'bank', and 'gross_amount', if the merchant wants transaction to be processed with 3D Secure
+      'secure'       : true,
+      'bank'       : 'bni',
+      'gross_amount'   : $("#price").val()
+    }
+  };
+
+  // handler when user click the 'Pay' button.
+  $('#submit-button').click(function(event){
+    event.preventDefault();
+    $(this).attr("disabled", "disabled");
+    Veritrans.token(card, callback);
+    return false;
+  });
+
+  function callback(response) {
+    if (response.redirect_url) {
+      // 3Dsecure transaction. Open 3Dsecure dialog
+      console.log('Open Dialog 3Dsecure');
+      openDialog(response.redirect_url);
+
+    } else if (response.status_code == '200') {
+      // success 3d secure or success normal
+      //close 3d secure dialog if any
+      closeDialog();
+
+      // store token data in input #token_id and then submit form to merchant server
+      $("#token-id").val(response.token_id);
+      $("#payment-form").submit();
+    } else {
+      // failed request token
+      //close 3d secure dialog if any
+      closeDialog();
+      $('#submit-button').removeAttr('disabled');
+      // Show status message.
+      $('#message').text(response.status_message);
+      console.log(JSON.stringify(response));
+    }
+  }
+
+  // Open 3DSecure dialog box
+  function openDialog(url) {
+    $.fancybox.open({
+          href: url,
+          type: 'iframe',
+          autoSize: false,
+          width: 400,
+          height: 420,
+          closeBtn: false,
+          modal: true
+      });
+  }
+
+  // Close 3DSecure dialog box
+  function closeDialog() {
+    $.fancybox.close();
+  }
+});
+</script>
