@@ -2,9 +2,140 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.1.4/semantic.min.css">
     <title>New Document</title>
 </head>
 <body>
     Hello Project Don!
+    <div class="container">
+        <div class="credit-card-form">
+        </div>
+
+    </div>
 </body>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mustache.js/2.1.3/mustache.js"></script>
+<script src="lib/js/jquery.maskedinput.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.1.4/semantic.min.js"></script>
+
+<script>
+    
+    $(function() {
+        var data = {
+            title: "Constructing HTML Elements"
+        }
+    
+        var template = [
+            '<form class="ui form" role="form">',
+                '<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">',
+                    '<div class="ui error message"></div>',
+                    '<div class="form-group">',
+                        '<label>Credit Card Number</label>',
+                        '<div class="ui fluid icon input">',
+                            '<input id="card-number" name="cardnumber" class="form-control" type="text" placeholder="XXXX XXXX XXXX XXXX" />',
+                            '<i id="credit-card-logo" class="payment icon"></i>',
+                        '</div>',
+                    '</div>',
+                '</div>',
+                '<div class="col-xs-7 col-sm-7 col-md-7 col-lg-7">',
+                    '<div class="form-group">',
+                        '<label>Exp. Date</label>',
+                        '<input id="exp-date" name="expdate" class="form-control" type="text" placeholder="MM / YY" />',
+                    '</div>',
+                '</div>',
+                '<div class="col-xs-5 col-sm-5 col-md-5 col-lg-5">',
+                    '<div class="form-group">',
+                        '<label>CVV</label>',
+                        '<input id="cvv" name="cvv" class="form-control" type="text" placeholder="***" />',
+                    '</div>',
+                '</div>',
+                '<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">',
+                    '<div class="form-group">',
+                        '<button name="submit" class="ui primary button" type="submit">Confirm Payment</button>',
+                    '</div>',
+                '</div>',
+            '</form>'
+        ].join("\n");
+        
+        function isCardNumberValid (cardnumber) {
+            var len = cardnumber.length;
+            var mul = 0;
+            var prodArr = [[0, 1, 2, 3, 4, 5, 6, 7, 8, 9], [0, 2, 4, 6, 8, 1, 3, 5, 7, 9]];
+            var sum = 0;
+        
+            while (len--) {
+                sum += prodArr[mul][parseInt(cardnumber.charAt(len), 10)];
+                mul ^= 1;
+            }
+        
+            if (sum % 10 === 0 && sum > 0) {
+                return true;
+            } else {
+                return false;
+            }
+        
+        }
+        
+        function cardType (cardnumber) {
+            console.log(cardnumber);
+            if(/^5[1-5]/.test(cardnumber)) {
+                return "MasterCard";
+            }
+            else if (/^4/.test(cardnumber)) {
+                return "Visa";
+            } else {
+                return "None";
+            }
+        }
+            
+        var html = Mustache.render(template, data);
+        $(".credit-card-form").append(template);
+        
+        function isCreditCardValid() {
+            var card_number = document.getElementById('card-number').value;
+            var card_exp_month = document.getElementById('exp-date').value.substr(0,2);
+            var card_exp_year = document.getElementById('exp-date').value.substr(5,2);
+            var card_cvv = document.getElementById('cvv').value;
+        }
+        
+        jQuery(function($){
+            $("#exp-date").mask("99 / 99",{placeholder:" "});
+            $("#cvv").mask("9999",{placeholder:" "});       
+        });
+        
+        $('#card-number').on('blur', function() {
+            
+        })
+
+        
+        $('#card-number').on('input',function(){
+            var cardnumber = $(this).val();
+            console.log(cardnumber);
+            if (!isCardNumberValid(cardnumber) && cardnumber.length == 16){
+                console.log('not valid');                  
+            }
+            else {
+                if (cardType(cardnumber) == "MasterCard"){
+                    $('#credit-card-logo').removeClass('visa').removeClass('payment').addClass('mastercard');
+                }
+                else if (cardType(cardnumber) == "Visa"){
+                    $('#credit-card-logo').removeClass('mastercard').removeClass('payment').addClass('visa');
+                } else {
+                    $('#credit-card-logo').removeClass('mastercard').removeClass('visa').addClass('payment');
+                }
+                 $("#card-number").mask("9999 9999 9999 9999",{placeholder:" "});
+            }
+            
+
+        });
+       
+       
+       
+        
+
+    })
+    
+    
+</script>
 </html>
