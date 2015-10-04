@@ -9,11 +9,11 @@
 </head>
 
 <body>
-    Hello Project Don!
-    
+
     <div class="container">
-        
-            <form name="creditcardform" class="ui form" onsubmit="return (validateForm(event))">
+
+
+            <form id="credit-card-form" name="creditcardform" class="ui form">
                 <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
                     <div id="error-message" class="ui error message"></div>
                     <div class="form-group">
@@ -38,56 +38,57 @@
                 </div>
                 <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
                     <div class="form-group">
-                        <input type="submit" class="ui primary button" value="Confirm Payment" />
+                        <input type="submit" class="ui primary button fluid" value="Confirm Payment" />
                     </div>
                 </div>
             </form>
 
     </div>
-</body>
+
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/mustache.js/2.1.3/mustache.js"></script>
 <script src="lib/js/jquery.maskedinput.js"></script>
 <script src="lib/js/jquery.formatter.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.1.4/semantic.min.js"></script>
 
-<script>
-    $(function() {
-        
+<script type="text/javascript">
+    $(document).ready(function() {
+
         function isCardNumberValid (cardnumber) {
             var len = cardnumber.length;
             var mul = 0;
             var prodArr = [[0, 1, 2, 3, 4, 5, 6, 7, 8, 9], [0, 2, 4, 6, 8, 1, 3, 5, 7, 9]];
             var sum = 0;
-        
+
             while (len--) {
                 sum += prodArr[mul][parseInt(cardnumber.charAt(len), 10)];
                 mul ^= 1;
             }
-        
+
             if (sum % 10 === 0 && sum > 0) {
                 return true;
             } else {
                 return false;
             }
         }
-        
+
         function isExpDateValid (expdate) {
             var date = expdate.split(" ");
+            date[1] = date[2];
             var currentDate = new Date();
-            if (expdate.length == 5) {
+            if (expdate.length == 6) {
               //Format date mm/yy
               var str = '20';
               date[1] = parseInt(str + date[1]);
             }
-              
+
             if (currentDate.getFullYear() == date[1]){
               if (date[0] >= currentDate.getMonth() && date[0] <= 12){
                 return true;
               }
               else {
                 return false;
-              }            
+              }
             }
             else if (date[1] > currentDate.getFullYear()){
               if (date[0] >= 1 && date[0] <= 12){
@@ -101,7 +102,7 @@
               return false;
             }
         }
-        
+
         function isCvvValid (cvv) {
             if (isNaN(parseInt(cvv))){
                 return false;
@@ -109,7 +110,7 @@
                 return true;
             }
         }
-        
+
         function cardType (cardnumber) {
             if(/^5[1-5]/.test(cardnumber)) {
                 return "MasterCard";
@@ -120,10 +121,10 @@
                 return "None";
             }
         }
-        
+
         function reformatCardNumber (card) {
             if (card.length > 16) {
-                card = card.substr(0,16);    
+                card = card.substr(0,16);
             }
             var rev     = card.split('');
             var rev2    = '';
@@ -133,87 +134,75 @@
                     rev2 += ' ';
                 }
             }
-            return rev2;                
-            
-
+            return rev2;
         }
-                 
-        // jQuery(function($){
-            
-        //     $("#card-number").mask("9999 9999 9999 9999",{placeholder:" "});
-        //     $("#exp-date").mask("99 / 99",{placeholder:" "});
-        //     $("#cvv").mask("9999",{placeholder:" "});       
-        // });
-        
-        // $('#card-number').on('blur', function() {
-            
-        // })
-        
+
         $('#card-number').formatter({
             'pattern': '{{9999}} {{9999}} {{9999}} {{9999}}'
-            // 'persistent': true
         });
 
         $('#exp-date').formatter({
             'pattern': '{{99}} / {{99}}'
-            // 'persistent': true
         });
 
-        
-        function validateForm(event) {
+        $('#credit-card-form').submit(function(event){
+            event.preventDefault();
             var card_number = document.getElementById('card-number').value.replace(/\s/g, '');
-            var card_exp_date = document.getElementById('exp-date');
+            var card_exp_date = document.getElementById('exp-date').value.replace(/[/]/g, '');
             var card_exp_month = document.getElementById('exp-date').value.substr(0,2);
             var card_exp_year = document.getElementById('exp-date').value.substr(5,2);
             var card_cvv = document.getElementById('cvv').value;
             var error_messages = "";
-            alert(card_number);
             if (!isCardNumberValid(card_number)){
-                error_messages += "Card Number is Invalid";
-                alert(error_messages);
+                error_messages += "<li>Card Number is Invalid</li>";
             }
             if (!isCvvValid(card_cvv)){
-                error_messages += "CVV is Invalid";
+                error_messages += "<li>CVV is Invalid</li>";
             }
             if (!isExpDateValid(card_exp_date)){
-                error_messages += "Exp Date is Invalid";
+                error_messages += "<li>Exp Date is Invalid</li>";
             }
-            $('#error-message').append(error_messages);
-            alert(error_messages);
+            $('#error-message').empty().append(error_messages);
             if (error_messages != ""){
                 event.preventDefault();
+                $('#error-message').show();
+
                 return false;
             } else {
                 event.preventDefault();
                 return true;
             }
-        };
 
-        // $('#card-number').on('input',function(){
-        //     var cardnumber = $(this).val().replace(/\s/g, '');
-            
-        //     console.log(cardnumber);
-        //     if (!isCardNumberValid(cardnumber) && cardnumber.length == 16){
-        //         console.log('not valid');                  
-        //     }
-        //     else {
-        //         if (cardType(cardnumber) == "MasterCard"){
-        //             $('#credit-card-logo').removeClass('visa').removeClass('payment').addClass('mastercard');
-        //         }
-        //         else if (cardType(cardnumber) == "Visa"){
-        //             $('#credit-card-logo').removeClass('mastercard').removeClass('payment').addClass('visa');
-        //         } else {
-        //             $('#credit-card-logo').removeClass('mastercard').removeClass('visa').addClass('payment');
-        //         }
-        //     }
-        //    $(this).val(reformatCardNumber(cardnumber));
-        // });
-            
-       
-       
-        
+        })
+
+
+
+        $('#card-number').on('input',function(){
+            var cardnumber = $(this).val().replace(/\s/g, '');
+
+            console.log(cardnumber);
+            if (!isCardNumberValid(cardnumber) && cardnumber.length == 16){
+                console.log('not valid');
+            }
+            else {
+                if (cardType(cardnumber) == "MasterCard"){
+                    $('#credit-card-logo').removeClass('visa').removeClass('payment').addClass('mastercard');
+                }
+                else if (cardType(cardnumber) == "Visa"){
+                    $('#credit-card-logo').removeClass('mastercard').removeClass('payment').addClass('visa');
+                } else {
+                    $('#credit-card-logo').removeClass('mastercard').removeClass('visa').addClass('payment');
+                }
+            }
+           $(this).val(reformatCardNumber(cardnumber));
+        });
+
+
+
+
 
     })
 
 </script>
+</body>
 </html>

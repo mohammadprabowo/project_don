@@ -3,16 +3,32 @@
 <head>
 	<meta charset="UTF-8">
 	<title>BootStrap Embedded Exmaple</title>
+	<style>
+	h1 {
+		text-align: center;
+	}
+	.form-wrapper {
+		width: 100%;
+		text-align: center;
+	}
+	iframe {
+		width: 500px;
+		height: 650px;
+		border: 0;
+		overflow-y: hidden;
+	}
+	</style>
 </head>
 <body>
-	<div id="hello"></div>
-	<script src="http://127.0.0.1:8080/Veritrans.js"></script>
+	<h1>Merchant Site</h1>
+	<div id="payment-form" class="form-wrapper"></div>
+	<script src="http://127.0.0.1:8080/bin/Veritrans.js"></script>
 	<script>
 		// set client_key and demo_key
 		function merchantCallback (tokenId) {
-			console.log(tokenId + "from parrent");
+			console.log(tokenId + "from parent");
 		}
-		Veritrans.generateForm("hello", "simple", merchantCallback);
+		Veritrans.generateForm("payment-form", "simple", merchantCallback);
 	</script>
 </body>
 </html>
