@@ -16,16 +16,22 @@ class ProjectDon implements Client {
 	// refference ke this aja?
 
 	private util: Util;
-	private window: Window
+	private window: Window;
+	private callback: any;
 
 	constructor(util: Util, window: Window) {
 		this.util = util;
 		this.window = window;
 	}
 
+	prefix(event : any){
+		this.callback(event);
+	}
+
 	token(token: () => Token, callbackEvent: any): void {
 		let cleanToken = this.util.validateToken(token, this.client_key, false);
 		let request = this.url + this.util.toQueryParam(cleanToken);
+		this.callback = callbackEvent;
 		
 		// add event listener
 		if (window.addEventListener) {
@@ -33,7 +39,7 @@ class ProjectDon implements Client {
 				if (event.data) {
 					callbackEvent(event.data);
 				}
-			}, false);
+			});
 		} else {
 			// for IE6 - IE10
 			// window.attachEvent("onmessage", (event) => {
@@ -71,12 +77,12 @@ class ProjectDon implements Client {
 	};
 
 	// callbackMerchant diatas
-	generateForm(id: string, templateName: string, callback: (tokenId: String) => void): void {
+	generateForm(id: string, templateName: string, amount: number, callback: (tokenId: String) => void): void {
 		let document = window.document;
 		let iframe : HTMLIFrameElement = document.createElement('iframe');
 		let templateObj: any = template;
 		let host = window.location.host;
-		let html = templateObj[templateName](this.url, this.client_key, host);
+		let html = templateObj[templateName](this.url, this.client_key, host, amount);
 		window.document.getElementById(id).appendChild(iframe);
 		
 		iframe.contentWindow.document.open();

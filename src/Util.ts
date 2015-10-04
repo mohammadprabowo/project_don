@@ -13,11 +13,9 @@ class Util {
 
 		if (isTwoClick) {
 			vtRequest.two_click = 'true';
-		} else {
-			vtRequest.secure_callback = 'Veritrans.c';
 		}
 
-		vtRequest.callback = 'Veritrans.c';
+		vtRequest.callback = 'Veritrans.prefix';
 		vtRequest.client_key = clientKey;
 
 		return vtRequest;
