@@ -51,47 +51,6 @@
 
 <script>
     $(function() {
-<<<<<<< HEAD
-    
-        var template = [
-            '<form class="ui form" role="form">',
-                '<div class="row">',
-                    '<div class="col-xs-12">',
-                        '<div class="ui error message"></div>',
-                        '<div class="form-group">',
-                            '<label>Credit Card Number</label>',
-                            '<div class="ui fluid icon input">',
-                                '<input id="card-number" name="cardnumber" class="form-control" type="text" placeholder="XXXX XXXX XXXX XXXX" />',
-                                '<i id="credit-card-logo" class="payment icon"></i>',
-                            '</div>',
-                        '</div>',
-                   '</div>',
-                '</div>',
-                '<div class="row">',
-                    '<div class="col-xs-7">',
-                        '<div class="form-group">',
-                            '<label>Exp. Date</label>',
-                            '<input id="exp-date" name="expdate" class="form-control" type="text" placeholder="MM / YY" />',
-                        '</div>',
-                    '</div>',
-                    '<div class="col-xs-5">',
-                        '<div class="form-group">',
-                            '<label>CVV</label>',
-                            '<input id="cvv" name="cvv" class="form-control" type="text" placeholder="***" />',
-                        '</div>',
-                    '</div>',
-                '</div>',
-                '<div class="row">',
-                    '<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">',
-                        '<div class="form-group">',
-                            '<button name="submit" class="ui primary button fluid" type="submit">Confirm Payment</button>',
-                        '</div>',
-                    '</div>',
-                '</div>',    
-            '</form>'
-        ].join("\n");
-=======
->>>>>>> upstream/master
         
         function isCardNumberValid (cardnumber) {
             var len = cardnumber.length;
@@ -124,10 +83,6 @@
             }
         }
             
-<<<<<<< HEAD
-        $(".credit-card-form").append(template);
-=======
->>>>>>> upstream/master
         
         function isCreditCardValid() {
             var card_number = document.getElementById('card-number').value;
@@ -136,44 +91,17 @@
             var card_cvv = document.getElementById('cvv').value;
         }
         
-<<<<<<< HEAD
-        // jQuery(function($){
-        //     $("#exp-date").mask("99 / 99",{placeholder:" "});
-        //     $("#cvv").mask("9999",{placeholder:" "});       
-        // });
-=======
         jQuery(function($){
             $("#card-number").mask("9999 9999 9999 9999",{placeholder:" "});
             $("#exp-date").mask("99 / 99",{placeholder:" "});
             $("#cvv").mask("9999",{placeholder:" "});       
         });
->>>>>>> upstream/master
         
         $('#card-number').on('blur', function() {
             
         })
 
         
-<<<<<<< HEAD
-        $('#card-number').on('input',function(){       
-            var cardnumber = $(this).val();
-            console.log(cardnumber);
-            if (!isCardNumberValid(cardnumber) && cardnumber.length == 16){
-                console.log('not valid');                  
-            }
-            else {
-                if (cardType(cardnumber) == "MasterCard"){
-                    $('#credit-card-logo').removeClass('visa').removeClass('payment').addClass('mastercard');
-                }
-                else if (cardType(cardnumber) == "Visa"){
-                    $('#credit-card-logo').removeClass('mastercard').removeClass('payment').addClass('visa');
-                } else {
-                    $('#credit-card-logo').removeClass('mastercard').removeClass('visa').addClass('payment');
-                }
-                //  $("#card-number").mask("9999 9999 9999 9999",{placeholder:" "});
-            }  
-        });
-=======
         // $('#card-number').on('input',function(){
         //     var cardnumber = $(this).val();
         //     console.log(cardnumber);
@@ -193,7 +121,6 @@
             
 
         // });
->>>>>>> upstream/master
        
        
        
