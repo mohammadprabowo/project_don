@@ -1,0 +1,1 @@
+enum Bank {BNI, MANDIRI, CIMB, BCA}

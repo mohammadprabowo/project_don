@@ -1,7 +1,7 @@
 {
   "scripts": {
     "clean": "rimraf spec/**/*.{js,map} && rimraf src/**/*.{js,map} && rimraf bin/**/*.{js,map}",
-    "compile": "npm run clean && tsc --out bin/don.js src/don.ts && tsc --out spec/allTest.js spec/**/*.ts",
+    "compile": "npm run clean && tsc --out bin/Veritrans.js src/Veritrans.ts",
     "test": "npm run compile && jasmine"
   },
   "devDependencies": {
