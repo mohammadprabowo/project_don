@@ -77,7 +77,7 @@ module template {
 		var card = function(){
 			return {
 			'card_number'     	: document.getElementById("ccnum").value.replace(/\s+/, "").trim(),
-			'card_exp_month'  	: payform.parseCardExpiry(document.getElementById("expiry").value).month < 10 ? "0" + payform.parseCardExpiry(document.getElementById("expiry").value).month :
+			'card_exp_month'  	: payform.parseCardExpiry(document.getElementById("expiry").value).month < 10 ? "0" + payform.parseCardExpiry(document.getElementById("expiry").value).month : 
 			payform.parseCardExpiry(document.getElementById("expiry").value).month,
 			'card_exp_year'   	: payform.parseCardExpiry(document.getElementById("expiry").value).year,
 			'card_cvv'        	: document.getElementById("cvc").value.replace(/\s+/, "").trim(),
@@ -85,14 +85,14 @@ module template {
 			'gross_amount'   	: ${amount}
 			}
 		};
-
+		
 		document.getElementById("submit").addEventListener("click", function() {
 			console.log(card());
 			if (document.getElementById("result").classList.contains("valid")) {
-
+				
 				Veritrans.token(card, function(event){
 					window.parent.postMessage(event.token_id, "http://${host}");
-				});
+				});	
 			}
 		});
 	</script>

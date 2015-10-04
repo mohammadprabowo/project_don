@@ -17,17 +17,17 @@ class ProjectDon implements Client {
 
 	private util: Util;
 	private window: Window;
-	private callback: any;
+	private callback: any;	
 
 	constructor(util: Util, window: Window) {
 		this.util = util;
 		this.window = window;
 	}
-
+	
 	prefix(event : any){
 		this.callback(event);
 	}
-
+	
 	token(token: () => Token, callbackEvent: any): void {
 		let cleanToken = this.util.validateToken(token, this.client_key, false);
 		let request = this.url + this.util.toQueryParam(cleanToken);
