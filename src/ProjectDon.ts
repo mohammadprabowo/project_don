@@ -11,28 +11,28 @@
 class ProjectDon implements Client {
 	url = "https://api.veritrans.co.id/v2/token";
 	client_key = "";
-	
+
 	// nyambung, get, set sampai ke templatenya
 	// refference ke this aja?
 
 	private util: Util;
 	private window: Window;
-	private callback: any;	
+	private callback: any;
 
 	constructor(util: Util, window: Window) {
 		this.util = util;
 		this.window = window;
 	}
-	
+
 	prefix(event : any){
 		this.callback(event);
 	}
-	
+
 	token(token: () => Token, callbackEvent: any): void {
 		let cleanToken = this.util.validateToken(token, this.client_key, false);
 		let request = this.url + this.util.toQueryParam(cleanToken);
 		this.callback = callbackEvent;
-		
+
 		// add event listener
 		if (window.addEventListener) {
 			window.addEventListener("message", (event) => {
@@ -56,7 +56,7 @@ class ProjectDon implements Client {
 		let cleanToken = this.util.validateToken(token, this.client_key, true);
 		let request = this.url + this.util.toQueryParam(cleanToken);
 		this.util.processJsonP(request);
-		
+
 		// add event listener
 		if (window.addEventListener) {
 			window.addEventListener("message", (event) => {
@@ -77,23 +77,34 @@ class ProjectDon implements Client {
 	};
 
 	// callbackMerchant diatas
-	generateForm(id: string, templateName: string, amount: number, callback: (tokenId: String) => void): void {
+	generateForm(id: string, templateName: string, amount: number, secure: boolean, callback: (response: any) => void): void {
 		let document = window.document;
 		let iframe : HTMLIFrameElement = document.createElement('iframe');
 		let templateObj: any = template;
 		let host = window.location.host;
-		let html = templateObj[templateName](this.url, this.client_key, host, amount);
+		let html = templateObj[templateName](this.url, this.client_key, host, amount, secure);
 		window.document.getElementById(id).appendChild(iframe);
-		
+
 		iframe.contentWindow.document.open();
 		iframe.contentWindow.document.write(html);
 		iframe.contentWindow.document.close();
-		
+
 		window.addEventListener("message", (event : MessageEvent) => {
-			console.log(event);
-			if (event.data) {
-				let tokenId = new String(event.data);
-				callback(tokenId.length !== 0 ? tokenId : "");
+			//3d secure
+			if (event.data.redirect_url) {
+				console.log('3d-secure');
+				iframe.src = event.data.redirect_url;
+			} else if (event.data.status_code == '200') {
+				console.log('3d-secure or success normal');
+				// iframe.contentWindow.document.close();
+				if (event.data) {
+					callback(event.data ? event.data : "");
+				}
+			} else {
+				//failed
+				console.log('get token failed');
+        callback(event.data ? event.data : "");
+
 			}
 		});
 	}

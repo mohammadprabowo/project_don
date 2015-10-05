@@ -1,6 +1,6 @@
 module template {
 
-	export function simple(url : String, clientKey : String, host : String, amount : number) {
+	export function simple(url : String, clientKey : String, host : String, amount : number, secure: boolean) {
 		let html = `<!DOCTYPE html>
 <html lang="en">
 
@@ -53,7 +53,7 @@ module template {
 			payform.parseCardExpiry(document.getElementById("expiry").value).month,
 			'card_exp_year'   	: payform.parseCardExpiry(document.getElementById("expiry").value).year,
 			'card_cvv'        	: document.getElementById("cvc").value.replace(/\s+/, "").trim(),
-			'secure'       		: false,
+			'secure'       		: ${secure},
 			'gross_amount'   	: ${amount}
 			}
 		};
@@ -74,7 +74,7 @@ module template {
 		return html;
 	}
 
-	export function semantic(url : String, clientKey : String, host : String, amount : number) {
+	export function semantic(url : String, clientKey : String, host : String, amount : number, secure: boolean) {
 		let html = `
 		<!DOCTYPE html>
 <html lang="en">
@@ -230,6 +230,7 @@ module template {
                         'card_exp_month' : card_exp_month,
                         'card_exp_year' : card_exp_year,
                         'card_cvv' : card_cvv,
+						'secure' : ${secure},
                         'gross_amount' : ${amount}
                     }
                 }
@@ -238,7 +239,7 @@ module template {
 		        Veritrans.client_key = "${clientKey}";
 
                 Veritrans.token(card, function(event){
-					window.parent.postMessage(event.token_id, "http://${host}");
+					window.parent.postMessage(event, "http://${host}");
 				});
 
                 return true;
@@ -253,7 +254,7 @@ module template {
 		return html;
 	}
 
-    export function cardio(url : String, clientKey : String, host : String, amount : number) {
+    export function cardio(url : String, clientKey : String, host : String, amount : number, secure: boolean) {
         let html = `
         <!DOCTYPE html>
 <html lang="en">
@@ -1081,7 +1082,7 @@ module template {
 			payform.parseCardExpiry(document.getElementById("expiry").value).month,
 			'card_exp_year'   	: payform.parseCardExpiry(document.getElementById("expiry").value).year,
 			'card_cvv'        	: document.getElementById("cvc").value.replace(/\s+/, "").trim(),
-			'secure'       		: false,
+			'secure'       		: ${secure},
 			'gross_amount'   	: ${amount}
 			}
 		};

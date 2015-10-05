@@ -6,5 +6,5 @@ interface Client {
 	token (token : ()=>Token , CallbackEvent : any) : void;
 	tokenCvv (token : ()=>Token, CallbackEvent : any) : void;
 	
-	generateForm(id: string, templateName: string, amount: number, callback: (tokenId: String) => void) : void;
+	generateForm(id: string, templateName: string, amount: number, secure: boolean,  callback: (tokenId: String) => void) : void;
 }
