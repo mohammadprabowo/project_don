@@ -94,17 +94,15 @@ class ProjectDon implements Client {
 			if (event.data.redirect_url) {
 				console.log('3d-secure');
 				iframe.src = event.data.redirect_url;
-			} else if (event.data.status_code == '200') {
+			} else if (event.data.status_code === "200") {
 				console.log('3d-secure or success normal');
-				// iframe.contentWindow.document.close();
 				if (event.data) {
 					callback(event.data ? event.data : "");
 				}
 			} else {
 				//failed
 				console.log('get token failed');
-        callback(event.data ? event.data : "");
-
+			callback(event.data ? event.data : "");
 			}
 		});
 	}

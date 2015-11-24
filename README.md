@@ -1,4 +1,4 @@
-Project Don : Veritrans JS in one bowl
+Project Don
 =======================================
 
 Next Generation Veritrans Javascript. Built using [TypeScript](http://www.typescriptlang.org/) for ES6 support, static typing, and type definitions. Resulting compilation are still compatible to ES3 browsers.
@@ -13,12 +13,24 @@ Binaries / global tools:
 * Jasmine : `npm install -g jasmine`
 * rimraf : `npm install -g rimraf`
 
-After this, simply do:
+After this, go to this project directory, and simply do:
 
 * `npm install`. Install all required dependencies from `package.json`
 * `tsd install`. Install all type definition file (*d.ts) from `tsd.json`
 
 You're done! Make sure your editor already have typescript plugin installed.
+
+### Demo
+
+First, compile the js:
+
+    npm run compile
+
+For previewing the sample embedded form, you need web server installed:
+
+    npm install http-server -g
+
+Then, go to `bin/` and type `http-server`. You can preview the sample embedded form in `http://localhost:8080/all-demo.html`
 
 ## Scripts
 

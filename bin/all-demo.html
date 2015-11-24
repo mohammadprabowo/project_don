@@ -9,15 +9,15 @@
 	<h3 id="tokenIdAfterCheckout1"></h3>
 		<h3 id="tokenIdAfterCheckout2"></h3>
 			<h3 id="tokenIdAfterCheckout3"></h3>
-	<!--<div id="simple" class="left"></div>-->
+	<div id="simple" class="left"></div>
 	<div id="semantic" class = "left"></div>
-	<!--<div id="cardio" class = "left"></div>-->
+	<div id="cardio" class = "left"></div>
 	<script src="http://127.0.0.1:8080/Veritrans.js"></script>
 	<script src="http://127.0.0.1:8080/all-demo.js"></script>
 	<script>
-		// Veritrans.generateForm("simple", "simple", 1000, merchant1Callback);
+		Veritrans.generateForm("simple", "simple", 1000, merchant1Callback);
 		Veritrans.generateForm("semantic", "semantic", 1000, true, merchant2Callback);
-		// Veritrans.generateForm("cardio", "cardio", 1000, merchant3Callback);
+		Veritrans.generateForm("cardio", "cardio", 1000, merchant3Callback);
 	</script>
 </body>
 </html>

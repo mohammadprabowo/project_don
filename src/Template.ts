@@ -1089,6 +1089,7 @@ module template {
 
 		document.getElementById("submit").addEventListener("click", function() {
 			Veritrans.token(card, function(event){
+				console.log(event);
 				window.parent.postMessage(event.token_id, "http://${host}");
 			});
 		});
